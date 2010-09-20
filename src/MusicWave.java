@@ -1,17 +1,22 @@
-import java.io.*;
-import javax.sound.sampled.AudioSystem;
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
 
 
 public class MusicWave{
 
-	protected String nom, artiste, album, format;
+	protected String nom, artiste, album;
+	protected AudioInputStream audioInput;
 
-	public Music(File zizic){
-
+	public MusicWave(File zizic){
+		try{
+			File fichier = zizic ;
+			audioInput = AudioSystem.getAudioInputStream(fichier);
+			renvoi();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
-
-	protected void play(){
-		
+	public AudioInputStream renvoiAudioInputStream(){
+			return audioInput;
 	}
-
 }
