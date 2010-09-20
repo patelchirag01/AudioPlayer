@@ -1,6 +1,6 @@
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;
-
+import javax.sound.sampled.AudioSystem;
 
 public class MusicWave{
 
@@ -11,7 +11,7 @@ public class MusicWave{
 		try{
 			File fichier = zizic ;
 			audioInput = AudioSystem.getAudioInputStream(fichier);
-			renvoi();
+			renvoiAudioInputStream();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
