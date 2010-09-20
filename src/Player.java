@@ -38,12 +38,11 @@ public class Player{
 		}
 	} 
 	public static void main(String args[]){
-		MusicWave music;
+		MusicWave music = new MusicWave();
 		try {
-			music = new MusicWave(new File("../Music/1-welcome.wav"));
+			new Player(music.returnStreamFromFile(new File("../Music/1-welcome.wav")));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		new Player(music.renvoiAudioInputStream());
 	}
 }
