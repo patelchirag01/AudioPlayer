@@ -1,5 +1,8 @@
+
 /**/
-public interface Interface-AudioFileDecoder
-{
-	public abstract AudioInputStream returnStreamFromFile(File file){}	
+public interface Interface-AudioFileDecoder{
+
+	public AudioFileStream returnStreamFromFile(File file);
+
+
 }
