@@ -1,9 +1,10 @@
 import java.io.*;
+import javax.sound.sampled.AudioSystem;
 
-public class Music{
+
+public class MusicWave{
 
 	protected String nom, artiste, album, format;
-	private final String[] formats = {"ogg","mp3","wave","flac"};
 
 	public Music(File zizic){
 
