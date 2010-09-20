@@ -1,0 +1,10 @@
+# configuration file for the tritonus library
+#
+
+org.tritonus.sampled.file.AuAudioFileWriter
+org.tritonus.sampled.file.WaveAudioFileWriter
+org.tritonus.sampled.file.AiffAudioFileWriter
+org.tritonus.sampled.file.gsm.GSMAudioFileWriter
+
+# end
+#
