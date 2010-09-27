@@ -9,6 +9,7 @@ import java.io.File;
 public class Player{
 
 	protected AudioInputStream audioInput;
+	protected boolean stop, pause;
 
 	public Player(AudioInputStream audioInput){
 		this.audioInput = audioInput;
@@ -17,6 +18,9 @@ public class Player{
 
 	public void play(){
 		try{
+			
+			pause = false;
+			stop = false;
 			int bytesPerFrame = audioInput.getFormat().getFrameSize();
 			int numBytes = 1024 * bytesPerFrame;
 			byte[] tableau = new byte[numBytes];
@@ -30,13 +34,19 @@ public class Player{
 			line.start();
 
 			int nb;
-			while ( (nb = audioInput.read(tableau,0,numBytes )) != -1 ){
-				line.write(tableau,0,nb);
-			}
+			while ( !stop && (nb = audioInput.read(tableau,0,numBytes )) != -1 )
+				if (!pause)
+					line.write(tableau,0,nb);
 		}catch (Exception e){
-		e.printStackTrace();
+			e.printStackTrace();
 		}
-	} 
+	}
+	public void pause{
+		this.pause = !pause;
+	}
+	public void stop{
+		this.stop = true;
+	}
 	public static void main(String args[]){
 		MusicWave music = new MusicWave();
 		try {
