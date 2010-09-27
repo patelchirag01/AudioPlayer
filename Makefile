@@ -3,6 +3,7 @@ CLASSPATH=bin/jl1.0.jar:bin/tritonus_share.jar:bin/jogg-0.0.7.jar:bin/jorbis-0.0
 JAVAC=javac
 BIN=bin
 CLASS_FILES=InterfaceAudioFileDecoder.class \
+	PlayListModel.class \
 	MusicFlac.class \
 	MusicMp3.class \
 	MusicOGG.class \
