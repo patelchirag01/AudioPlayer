@@ -1,11 +1,15 @@
 import java.io.File;
 import javax.sound.sampled.*;
+import org.kc7bfi.jflac.*;
+import org.kc7bfi.jflac.sound.spi.*;
 
-public class MusicMp3 implements InterfaceAudioFileDecoder {
+public class MusicFlac implements InterfaceAudioFileDecoder {
 	
 	public AudioInputStream returnStreamFromFile(File file) {
+		
+		FlacAudioFileReader fr = new FlacAudioFileReader();
 		try {
-			AudioInputStream in= AudioSystem.getAudioInputStream(file);
+			AudioInputStream in= fr.getAudioInputStream(file);
 		return in;
 		} catch(  javax.sound.sampled.UnsupportedAudioFileException e) {
 			e.printStackTrace();
@@ -16,8 +20,8 @@ public class MusicMp3 implements InterfaceAudioFileDecoder {
 	}
 	
 	public static void main(String[] args) {
-		MusicMp3 m = new MusicMp3();
-		m.returnStreamFromFile(new File("/home/infoetu/haratykt/AudioPlayer/mp3.mp3"));
+		MusicFlac m = new MusicFlac();
+		m.returnStreamFromFile(new File("/tmp/test.flac"));
 	}
 }
 
