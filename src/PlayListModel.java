@@ -2,23 +2,45 @@ import java.io.*;
 import java.util.*;
 import javax.swing.AbstractListModel;
 
-public class PlayListModel extends AbstractListModel {
+/**
+ * Classe gérant la playlist.
+ * @author Benjamin
+ * @version 1.0
+ */
 
+public class PlayListModel extends AbstractListModel {
+	/** ArrayList de File */
 	protected ArrayList<File> playlist;
 
+	/** Constructeur par défaut 
+	* @param list
+	*   Une liste contenant la playlist	
+	*/
 	public PlayListModel (ArrayList<File> list){
 		playlist = list;
 	}
 
+	/** Constructeur utilisant un File, fichier ou répertoire 
+	* @param file
+	*  Fichier ou répertoire contenant la playlist
+	*/
 	public PlayListModel (File file){
 		this(new ArrayList<File>());
 		add(file);
 	}
 
+	/** Constructeur utilisant un String 
+	* @param path
+	*   Chemin vers un fichier ou un répertoire contenant la playlist
+	*/
 	public PlayListModel (String path){
 		this(new File(path));
 	}
 
+	/** Ajoute à la playlist un fichier ou le contenu d'un répertoire
+	* @param file
+	*   Fichier à ajouter
+	*/
 	protected void add(File file){
 		if(file.canRead())
 		{
@@ -85,18 +107,33 @@ public class PlayListModel extends AbstractListModel {
 		}
 	}
 
+	/** Enlève à la playlist un fichier
+	* @param file
+	*   Fichier à retirer
+	*/
 	protected void remove(File file){
 		playlist.remove(file);
 	}
 
+	/** Retourne l'élément de la playlist qui à pour index <i>index</i>
+	* @param index
+	*   Index de l'élément recherché
+	* @return
+	*   Un fichier de la playlist
+	*/
 	public File getElementAt(int index){
 		return playlist.get(index);
 	}
 
+	/** Retourne la taille de la playlist
+	* @return
+	*   La taille de la playlist
+	*/
 	public int getSize(){
 		return playlist.size();
 	}
 
+	/** Mélange la playlist	*/
 	public void randomize(){
 		ArrayList<File> result = new ArrayList<File>();
 		double size;
@@ -112,6 +149,11 @@ public class PlayListModel extends AbstractListModel {
 		playlist=result;
 	}	
 
+	/**
+	* Affiche la playlist
+	* @return
+	*   Un String contenant le chemin de tous les fichiers de la playlist
+	*/
 	protected String displayList(){
 		String result = "";
 		int size = playlist.size();
@@ -121,6 +163,12 @@ public class PlayListModel extends AbstractListModel {
 		}
 		return result;
 	}
+
+
+	/** Main (pour tests) !
+	* @param args
+	*   Options (inutilisés pour l'instant)
+	*/
 
 	public static void main(String[] args){
 		PlayListModel test = new PlayListModel("/home/infoetu/vanryseb/Java/XP/AudioPlayer/src");
