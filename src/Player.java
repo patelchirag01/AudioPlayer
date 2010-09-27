@@ -20,24 +20,29 @@ public class Player{
 	{
 		// prend un fichier et test quel est son extention (mp3, ogg, wav, flac)
 		boolean b = Pattern.matches(".*\\.mp3$", file.getName());
+		AudioInputStream result = null;
 		if(b)
 		{
-			this.audioInput = new MusicMP3().returnStreamFromFile(file);
+			result = new MusicMP3().returnStreamFromFile(file);
 		}
 		b = Pattern.matches(".*\\.wav$", file.getName());
 		if(b)
 		{
-			this.audioInput = new MusicWave().returnStreamFromFile(file);
+			result = new MusicWave().returnStreamFromFile(file);
 		}
 		b = Pattern.matches(".*\\.flac$", file.getName());
 		if(b)
 		{
-			this.audioInput = new MusicFLAC().returnStreamFromFile(file);
+			result = new MusicFLAC().returnStreamFromFile(file);
 		}
 		b = Pattern.matches(".*\\.ogg$", file.getName());
 		if(b)
 		{
-			this.audioInput = new MusicOGG().returnStreamFromFile(file);
+			result = new MusicOGG().returnStreamFromFile(file);
+		}
+		if ( result != null)
+		{
+			this(result);
 		}
 	}
 
