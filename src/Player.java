@@ -12,11 +12,6 @@ public class Player{
 	protected AudioInputStream audioInput;
 	protected boolean stop, pause;
 
-	public Player(AudioInputStream audioInput){
-		this.audioInput = audioInput;
-		play();
-	}
-
 	public Player(File file)
 	{
 		// prend un fichier et test quel est son extention (mp3, ogg, wav, flac)
@@ -24,7 +19,7 @@ public class Player{
 		AudioInputStream result = null;
 		if(b)
 		{
-			result = new MusicMP3().returnStreamFromFile(file);
+			result = new MusicMp3().returnStreamFromFile(file);
 		}
 		b = Pattern.matches(".*\\.wav$", file.getName());
 		if(b)
@@ -34,7 +29,7 @@ public class Player{
 		b = Pattern.matches(".*\\.flac$", file.getName());
 		if(b)
 		{
-			result = new MusicFLAC().returnStreamFromFile(file);
+			result = new MusicFlac().returnStreamFromFile(file);
 		}
 		b = Pattern.matches(".*\\.ogg$", file.getName());
 		if(b)
@@ -43,8 +38,12 @@ public class Player{
 		}
 		if ( result != null)
 		{
-			this(result);
+			setStream(result);
 		}
+	}
+
+	public void setStream(AudioInputStream audioInput){
+		this.audioInput = audioInput;
 	}
 
 	public void play(){
@@ -72,16 +71,16 @@ public class Player{
 			e.printStackTrace();
 		}
 	}
-	public void pause{
+	public void pause() {
 		this.pause = !pause;
 	}
-	public void stop{
+	public void stop() {
 		this.stop = true;
 	}
 	public static void main(String args[]){
 		MusicWave music = new MusicWave();
 		try {
-			new Player(music.returnStreamFromFile(new File("../Music/1-welcome.wav")));
+			new Player(new File("../Music/1-welcome.wav"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
