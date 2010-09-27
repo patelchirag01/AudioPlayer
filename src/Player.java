@@ -5,6 +5,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import java.io.FileInputStream;
 import java.io.File;
+import java.util.regex.*;
 
 public class Player{
 
@@ -14,6 +15,31 @@ public class Player{
 	public Player(AudioInputStream audioInput){
 		this.audioInput = audioInput;
 		play();
+	}
+
+	public Player(File file)
+	{
+		// prend un fichier et test quel est son extention (mp3, ogg, wav, flac)
+		boolean b = Pattern.matches(".*\\.mp3$", file.getName());
+		if(b)
+		{
+			this.audioInput = new MusicMP3().returnStreamFromFile(file);
+		}
+		b = Pattern.matches(".*\\.wav$", file.getName());
+		if(b)
+		{
+			this.audioInput = new MusicWave().returnStreamFromFile(file);
+		}
+		b = Pattern.matches(".*\\.flac$", file.getName());
+		if(b)
+		{
+			this.audioInput = new MusicFLAC().returnStreamFromFile(file);
+		}
+		b = Pattern.matches(".*\\.ogg$", file.getName());
+		if(b)
+		{
+			this.audioInput = new MusicOGG().returnStreamFromFile(file);
+		}
 	}
 
 	public void play(){
