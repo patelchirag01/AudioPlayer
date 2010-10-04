@@ -2,5 +2,7 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 
 public interface InterfaceAudioFileDecoder{
-	public AudioInputStream returnStreamFromFile(File file);
+	public void play();
+	public void pause();
+	public void stop();
 }
