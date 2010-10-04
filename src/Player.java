@@ -45,6 +45,9 @@ public class Player{
 		{
 			setStream(result);
 		}
+		else {
+			System.out.println("The file "+file.getName()+" have an unrecognized type");
+		}
 	}
 
 	public void setStream(InterfaceAudioFileDecoder audioInput){
