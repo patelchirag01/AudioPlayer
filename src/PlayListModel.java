@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import javax.swing.AbstractListModel;
 
 /**
@@ -183,7 +184,7 @@ public class PlayListModel extends AbstractListModel {
 	}
 
 	public void play(){
-		int size = size();
+		int size = getSize();
 		for (int i = 0; i < size; i++)
 		{
 			

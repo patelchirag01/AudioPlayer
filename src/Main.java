@@ -6,13 +6,7 @@ public class Main{
 			PlayListModel playlist = new PlayListModel(args[0]);
 			for (int i = 1; i < args.length; i++)
 			{
-				try{
-					playlist.add(args[i]);
-				}
-				catch (IOException ex)
-				{
-					System.out.println("Unable to load the file "+ args[i]);
-				}
+				playlist.add(args[i]);
 			}
 			playlist.play();
 		}else{
