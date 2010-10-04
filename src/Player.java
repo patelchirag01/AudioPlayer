@@ -20,7 +20,7 @@ public class Player{
 		InterfaceAudioFileDecoder result = null;
 		if(b)
 		{
-			//result = new MusicMp3(file);
+			result = new MusicMp3(file);
 			format = "mp3";
 		}
 		b = Pattern.matches(".*\\.wav$", file.getName());
@@ -32,13 +32,13 @@ public class Player{
 		b = Pattern.matches(".*\\.flac$", file.getName());
 		if(b)
 		{
-			//result = new MusicFlac(file);
+			result = new MusicFlac(file);
 			format = "flac";
 		}
 		b = Pattern.matches(".*\\.ogg$", file.getName());
 		if(b)
 		{
-			//result = new MusicOGG(file);
+			result = new MusicOGG(file);
 			format = "ogg";
 		}
 		if ( result != null)
@@ -52,7 +52,6 @@ public class Player{
 	}
 
 	public void play(){
-		if (this.format.equals("wav"))
 			audioInput.play();
 		
 	}
