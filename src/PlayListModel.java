@@ -24,7 +24,7 @@ public class PlayListModel extends AbstractListModel {
 	* @param file
 	*  Fichier ou répertoire contenant la playlist
 	*/
-	public PlayListModel (File file){
+	public PlayListModel(File file){
 		this(new ArrayList<File>());
 		add(file);
 	}
@@ -42,69 +42,87 @@ public class PlayListModel extends AbstractListModel {
 	*   Fichier à ajouter
 	*/
 	protected void add(File file){
-		if(file.canRead())
+		// Vérifie si le fichier passé en argument est un fichier contenant une palylist ou un fichier musical
+		if(	Pattern.matches(".*\\.mp3$", file.getName()) |
+			Pattern.matches(".*\\.wav$", file.getName()) |
+			Pattern.matches(".*\\.ogg$", file.getName()) |
+			Pattern.matches(".*\\.flac$", file.getName()))
 		{
-			if( file.isFile())
+			playlist.add(file);
+		}
+		else {
+			if(file.canRead())
 			{
-				BufferedReader in = null;
-				try{
-					in = new BufferedReader(new FileReader(file));
-				}
-				catch (IOException e)
+				if( file.isFile())
 				{
-					System.out.println("Unable to read " + file.getAbsolutePath());
-				}
-				String line = "";
-				try
-				{
-						line = in.readLine();
-				}
-				catch (IOException e)
-				{
-					System.out.println("Unable to read the first line");
-				}
-
-				while (line != null)
-				{
-					if(line.charAt(0) == '/')
-					{
-						playlist.add(new File(line));
-					}
-					else 
-					{
-						playlist.add(new File(file.getParent()+"/"+line));
-					}
-					try
-					{
-						line = in.readLine();
+					BufferedReader in = null;
+					try{
+						in = new BufferedReader(new FileReader(file));
 					}
 					catch (IOException e)
 					{
-						System.out.println("Unable to read the next line");
+						System.out.println("Unable to read " + file.getAbsolutePath());
+					}
+					String line = "";
+					try
+					{
+							line = in.readLine();
+					}
+					catch (IOException e)
+					{
+						System.out.println("Unable to read the first line");
+					}
+
+					while (line != null)
+					{
+						if(line.charAt(0) == '/')
+						{
+							playlist.add(new File(line));
+						}
+						else 
+						{
+							playlist.add(new File(file.getParent()+"/"+line));
+						}
+						try
+						{
+							line = in.readLine();
+						}
+						catch (IOException e)
+						{
+							System.out.println("Unable to read the next line");
+						}
 					}
 				}
-			}
-			if( file.isDirectory())
-			{
-				File[] temp = file.listFiles();
-				int size = temp.length;
-				for (int i = 0 ; i < size ; i++)
+				if( file.isDirectory())
 				{
-					playlist.add(temp[i]);
+					File[] temp = file.listFiles();
+					int size = temp.length;
+					for (int i = 0 ; i < size ; i++)
+					{
+						playlist.add(temp[i]);
+					}
+				} 
+			}
+			else
+			{
+				if( file.isFile())
+				{
+					System.out.println("Can't read the file "+file.getAbsolutePath());
 				}
-			} 
-		}
-		else
-		{
-			if( file.isFile())
-			{
-				System.out.println("Can't read the file "+file.getAbsolutePath());
-			}
-			if( file.isDirectory())
-			{
-				System.out.println("Can't open the directory "+file.getAbsolutePath());
+				if( file.isDirectory())
+				{
+					System.out.println("Can't open the directory "+file.getAbsolutePath());
+				}
 			}
 		}
+	}
+
+	/** Ajoute à la playlist un fichier ou le contenu d'un répertoire
+	* @param path
+	*   Chemin du fichier à ajouter
+	*/
+	protected void add(String path){
+		this.add(new File(path));
 	}
 
 	/** Enlève à la playlist un fichier
@@ -162,6 +180,17 @@ public class PlayListModel extends AbstractListModel {
 			result = result + "fichier " + i + " : " + playlist.get(i).getAbsolutePath()+"\n";
 		}
 		return result;
+	}
+
+	public void play(){
+		int size = size();
+		for (int i = 0; i < size; i++)
+		{
+			
+			File file = getElementAt(i);
+			System.out.println("Fichier à lire : "+file);
+			Player play = new Player(file);
+		}
 	}
 
 
