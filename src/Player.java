@@ -9,32 +9,37 @@ import java.util.regex.*;
 
 public class Player{
 
-	protected AudioInputStream audioInput;
+	protected InterfaceAudioFileDecoder audioInput;
 	protected boolean stop, pause;
+	protected String format;
 
 	public Player(File file)
 	{
 		// prend un fichier et test quel est son extention (mp3, ogg, wav, flac)
 		boolean b = Pattern.matches(".*\\.mp3$", file.getName());
-		AudioInputStream result = null;
+		InterfaceAudioFileDecoder result = null;
 		if(b)
 		{
-			result = new MusicMp3().returnStreamFromFile(file);
+			//result = new MusicMp3(file);
+			format = "mp3";
 		}
 		b = Pattern.matches(".*\\.wav$", file.getName());
 		if(b)
 		{
-			result = new MusicWave().returnStreamFromFile(file);
+			result = new MusicWave(file);
+			format = "wav";
 		}
 		b = Pattern.matches(".*\\.flac$", file.getName());
 		if(b)
 		{
-			result = new MusicFlac().returnStreamFromFile(file);
+			//result = new MusicFlac(file);
+			format = "flac";
 		}
 		b = Pattern.matches(".*\\.ogg$", file.getName());
 		if(b)
 		{
-			result = new MusicOGG().returnStreamFromFile(file);
+			//result = new MusicOGG(file);
+			format = "ogg";
 		}
 		if ( result != null)
 		{
@@ -42,34 +47,14 @@ public class Player{
 		}
 	}
 
-	public void setStream(AudioInputStream audioInput){
+	public void setStream(InterfaceAudioFileDecoder audioInput){
 		this.audioInput = audioInput;
 	}
 
 	public void play(){
-		try{
-			
-			pause = false;
-			stop = false;
-			int bytesPerFrame = audioInput.getFormat().getFrameSize();
-			int numBytes = 1024 * bytesPerFrame;
-			byte[] tableau = new byte[numBytes];
-
-
-			AudioFormat audioFormat = audioInput.getFormat();
-			DataLine.Info Info = new DataLine.Info(SourceDataLine.class,audioFormat);
-
-			SourceDataLine line=(SourceDataLine)AudioSystem.getLine(Info);
-			line.open(audioFormat);
-			line.start();
-
-			int nb;
-			while ( !stop && (nb = audioInput.read(tableau,0,numBytes )) != -1 )
-				if (!pause)
-					line.write(tableau,0,nb);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
+		if (this.format.equals("wav"))
+			audioInput.play();
+		
 	}
 	public void pause() {
 		this.pause = !pause;
@@ -78,9 +63,10 @@ public class Player{
 		this.stop = true;
 	}
 	public static void main(String args[]){
-		MusicWave music = new MusicWave();
+		Player play;
 		try {
-			new Player(new File("../Music/1-welcome.wav"));
+			play = new Player(new File("../Music/1-welcome.wav"));
+			play.play();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
