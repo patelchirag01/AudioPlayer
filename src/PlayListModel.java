@@ -191,6 +191,7 @@ public class PlayListModel extends AbstractListModel {
 			File file = getElementAt(i);
 			System.out.println("Fichier à lire : "+file);
 			Player play = new Player(file);
+			play.play();
 		}
 	}
 
