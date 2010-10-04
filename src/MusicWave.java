@@ -43,14 +43,14 @@ public class MusicWave implements InterfaceAudioFileDecoder{
 				if (!pause){
 					line.write(tableau,0,nb);
 					count += nb;
-					System.out.println("Lecture : "+(int)(count / audioInput.getFrameLength())+" %");
+					//System.out.println("Lecture : "+(int)(count / audioInput.getFrameLength())+" %");
 				}
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 	}
 	public void pause(){
-
+		this.pause = !pause;
 	}
 	public void stop(){
 
