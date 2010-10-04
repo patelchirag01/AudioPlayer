@@ -53,7 +53,7 @@ public class MusicWave implements InterfaceAudioFileDecoder{
 		this.pause = !pause;
 	}
 	public void stop(){
-
+		this.stop = true;
 	}
 
 }
