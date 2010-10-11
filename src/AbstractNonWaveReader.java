@@ -1,15 +1,27 @@
 import java.io.*;
 import javax.sound.sampled.*;
+import java.util.Map;
+import java.util.Iterator;
 
 public class AbstractNonWaveReader implements InterfaceAudioFileDecoder {
 
 	protected File file;
 	protected boolean stop, pause, isFinished;
+	protected Map tags;
+
 	
 	public AbstractNonWaveReader(File file){
 		isFinished = false;
 		stop = pause = false;
 		this.file = file;
+		tags=null;
+		try {
+			AudioFileFormat format = AudioSystem.getAudioFileFormat(file);
+			tags = format.properties();
+		} catch (Exception e)
+	    {
+			e.printStackTrace();
+	    }
 	}
 	
 	public void play() {
@@ -79,7 +91,42 @@ public class AbstractNonWaveReader implements InterfaceAudioFileDecoder {
 	public void stop(){
 		this.stop = true;
 	}
+
 	public boolean isFinished(){
 		return isFinished;
+	}
+
+	public Map getTags() {
+		return tags;
+	}
+	
+	public void printTags(){
+		MapGenres genres = new MapGenres();
+		if (tags.isEmpty())  {
+			System.out.println("** Aucun tags **");
+			return;
+		} else {
+			System.out.println("** Tags **");
+		}
+		
+		if (tags.get("author")!=null)
+			System.out.println("*Auteur : " + tags.get("author"));
+		if (tags.get("title")!=null)
+			System.out.println("*Titre : " + tags.get("title"));
+		if (tags.get("album")!=null)
+			System.out.println("*Album : " + tags.get("album"));
+		if (tags.get("date")!=null)
+			System.out.println("*Date : " + tags.get("date"));
+		if (tags.get("duration")!=null) {
+			int duree=Integer.parseInt(tags.get("duration")+"")/1000000;
+			int duree_min= duree/60;
+			duree = duree%60;
+			System.out.println("*Durée : " + duree_min + "min"+duree+"s ");
+		}
+		if (tags.get("mp3.id3tag.genre")!=null)
+			System.out.println(tags.get("mp3.id3tag.genre"));
+			//System.out.println("*Genre : " + genres.get(Integer.parseInt(tags.get("mp3.id3tag.genre")+"") ) );
+		
+		
 	}
 }

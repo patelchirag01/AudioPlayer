@@ -7,11 +7,9 @@ import java.io.FileInputStream;
 import java.io.File;
 import java.util.regex.*;
 
-public class Player{
+public class Player extends Thread{
 
 	protected InterfaceAudioFileDecoder audioInput;
-	protected boolean stop, pause;
-	protected String format;
 
 	public Player(File file)
 	{
@@ -21,25 +19,21 @@ public class Player{
 		if(b)
 		{
 			result = new AbstractNonWaveReader(file);
-			format = "mp3";
 		}
 		b = Pattern.matches(".*\\.wav$", file.getName());
 		if(b)
 		{
 			result = new MusicWave(file);
-			format = "wav";
 		}
 		b = Pattern.matches(".*\\.flac$", file.getName());
 		if(b)
 		{
 			//result = new MusicFlac(file);
-			format = "flac";
 		}
 		b = Pattern.matches(".*\\.ogg$", file.getName());
 		if(b)
 		{
 			result = new AbstractNonWaveReader(file);
-			format = "ogg";
 		}
 		if ( result != null)
 		{
@@ -50,20 +44,33 @@ public class Player{
 		}
 	}
 
+	public void run(){
+		audioInput.play();
+		System.out.print("");
+	}
+
 	public void setStream(InterfaceAudioFileDecoder audioInput){
 		this.audioInput = audioInput;
 	}
 
 	public void play(){
-			audioInput.play();
-		
+		start();
 	}
 	public void pause() {
-		this.pause = !pause;
+		audioInput.pause();
 	}
-	public void stop() {
-		this.stop = true;
+	public void stopMusic() {
+		audioInput.stop();
 	}
+
+	public boolean isFinished(){
+		return audioInput.isFinished();
+	}
+
+	public void printTags(){
+		audioInput.printTags();
+	}
+
 	public static void main(String args[]){
 		Player play;
 		try {

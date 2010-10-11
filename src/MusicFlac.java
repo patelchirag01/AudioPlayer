@@ -1,4 +1,4 @@
-import org.kc7bfi.jflac.*;
+//import org.kc7bfi.jflac.*;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
@@ -9,7 +9,7 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-public class MusicFlac implements InterfaceAudioFileDecoder {
+public class MusicFlac /*implements InterfaceAudioFileDecoder*/ {
 	
 	File file;	
 

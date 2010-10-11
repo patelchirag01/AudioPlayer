@@ -271,6 +271,7 @@ public class PlayListModel extends Thread {
 			if ( line.equals("pause")) pause();
 			if ( line.equals("play")) play();
 			if ( line.equals("random")) randomize();
+			if ( line.equals("tags")) currentPlayer.printTags();
 		}
 	}
 
