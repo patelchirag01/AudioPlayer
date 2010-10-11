@@ -9,16 +9,23 @@ import javax.swing.AbstractListModel;
  * @version 1.0
  */
 
-public class PlayListModel extends AbstractListModel {
+public class PlayListModel extends Thread {
 	/** ArrayList de File */
 	protected ArrayList<File> playlist;
+	protected int currentIndex;
+	protected Player currentPlayer;
+	protected Scanner scan;
+	protected boolean stop,pause;
 
 	/** Constructeur par défaut 
 	* @param list
 	*   Une liste contenant la playlist	
 	*/
 	public PlayListModel (ArrayList<File> list){
+		currentIndex = 0;
+		scan = new Scanner(System.in);
 		playlist = list;
+		start();
 	}
 
 	/** Constructeur utilisant un File, fichier ou répertoire 
@@ -165,7 +172,7 @@ public class PlayListModel extends AbstractListModel {
 			result.add(temp);
 			playlist.remove(temp);
 		}
-		playlist=result;
+		playlist = result;
 	}	
 
 	/**
@@ -173,7 +180,7 @@ public class PlayListModel extends AbstractListModel {
 	* @return
 	*   Un String contenant le chemin de tous les fichiers de la playlist
 	*/
-	protected String displayList(){
+	public String toString(){
 		String result = "";
 		int size = playlist.size();
 		for (int i = 0; i < size; i++)
@@ -182,16 +189,88 @@ public class PlayListModel extends AbstractListModel {
 		}
 		return result;
 	}
+	
+	public void playAll(){
+		int size = getSize();
+		while ( currentIndex < size )
+		{
+			if (!stop)
+			{
+				play();
+				while(!currentPlayer.isFinished())
+				{
+					System.out.print("");
+				}
+			}
+		}
+	}
 
 	public void play(){
-		int size = getSize();
-		for (int i = 0; i < size; i++)
+		if ( !pause )
 		{
-			
-			File file = getElementAt(i);
-			System.out.println("Fichier à lire : "+file);
-			Player play = new Player(file);
-			play.play();
+			stop = false;
+			pause = false;
+			currentPlayer = new Player(playlist.get(currentIndex));
+			System.out.println("Playing file "+ currentIndex +" named : "+ playlist.get(currentIndex).getName());
+			currentIndex++;
+			currentPlayer.play();
+		}
+		else
+		{
+			pause();
+		}
+	}
+
+	public void pause(){
+		if ( currentPlayer != null)
+		{
+			currentPlayer.pause();
+			pause = !pause;
+		}
+	}
+
+	public void stopMusic(){
+		if ( currentPlayer != null)
+		{
+			if (!stop)
+			{
+				stop = true;
+				pause = false;
+				currentIndex--;
+				currentPlayer.stopMusic();
+			}
+		}
+	}
+	public void next(){
+		if ( currentPlayer != null)
+		{
+			/*if(stop)
+				currentIndex++;*/
+			stop = false;
+			currentPlayer.stopMusic();
+		}
+	}
+
+	public void previous(){
+		if ( currentPlayer != null)
+		{
+			stopMusic();
+			stop = false;
+			currentIndex-- ;
+			play();
+		}
+	}
+
+	//Scan
+	public void run(){
+		while(true){
+			String line = scan.next();
+			if ( line.equals("next")) next();
+			if ( line.equals("previous")) previous();
+			if ( line.equals("stop")) stopMusic();
+			if ( line.equals("pause")) pause();
+			if ( line.equals("play")) play();
+			if ( line.equals("random")) randomize();
 		}
 	}
 
@@ -203,11 +282,11 @@ public class PlayListModel extends AbstractListModel {
 
 	public static void main(String[] args){
 		PlayListModel test = new PlayListModel("/home/infoetu/vanryseb/Java/XP/AudioPlayer/src");
-		System.out.println(test.displayList());
+		System.out.println(test.toString());
 		test.randomize();
-		System.out.println(test.displayList());
+		System.out.println(test.toString());
 		PlayListModel test2 = new PlayListModel("/home/infoetu/vanryseb/Java/XP/AudioPlayer/test");
-		System.out.println(test2.displayList());
+		System.out.println(test2.toString());
 	}
 
 }
