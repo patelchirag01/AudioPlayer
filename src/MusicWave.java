@@ -10,8 +10,10 @@ public class MusicWave implements InterfaceAudioFileDecoder{
 	protected String nom, artiste, album;
 	protected AudioInputStream audioInput;
 	protected boolean stop, pause;
+	protected boolean isFinished;
 
 	public MusicWave(File zizic){
+		isFinished = false;
 		audioInput = returnStreamFromFile(zizic);
 	}
 	public AudioInputStream returnStreamFromFile(File zizic){
@@ -27,7 +29,7 @@ public class MusicWave implements InterfaceAudioFileDecoder{
 			pause = false;
 			stop = false;
 			int bytesPerFrame = audioInput.getFormat().getFrameSize();
-			int numBytes = 1024 * bytesPerFrame;
+			int numBytes = 256 * bytesPerFrame;
 			byte[] tableau = new byte[numBytes];
 
 
@@ -39,14 +41,22 @@ public class MusicWave implements InterfaceAudioFileDecoder{
 			line.start();
 
 			int nb, count=0;
-			while ( !stop && (nb = audioInput.read(tableau,0,numBytes )) != -1 )
-				if (!pause){
+			while ( !stop )
+			{	
+				System.out.print("");
+				while(!stop && !pause && (nb = audioInput.read(tableau,0,numBytes )) != -1 )
+				{
 					line.write(tableau,0,nb);
 					count += nb;
-					//System.out.println("Lecture : "+(int)(count / audioInput.getFrameLength())+" %");
 				}
+			}
+					//System.out.println("Lecture : "+(int)(count / audioInput.getFrameLength())+" %");
+			isFinished = true;
 		}catch (Exception e){
 			e.printStackTrace();
+		}
+		finally{
+			isFinished = true;
 		}
 	}
 	public void pause(){
@@ -54,6 +64,9 @@ public class MusicWave implements InterfaceAudioFileDecoder{
 	}
 	public void stop(){
 		this.stop = true;
+	}
+	public boolean isFinished(){
+		return isFinished;
 	}
 
 }
