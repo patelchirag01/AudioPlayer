@@ -4,7 +4,8 @@ import javax.sound.sampled.*;
 public class AbstractNonWaveReader implements InterfaceAudioFileDecoder {
 
 	protected File file;
-
+	protected boolean stop, pause;
+	
 	public AbstractNonWaveReader(File file){
 		this.file = file;
 	}
@@ -62,6 +63,10 @@ public class AbstractNonWaveReader implements InterfaceAudioFileDecoder {
 	  return res;
 	}
 	
-	public void pause(){}
-	public void stop(){}
+	public void pause(){
+		this.pause = !pause;
+	}
+	public void stop(){
+		this.stop = true;
+	}
 }
