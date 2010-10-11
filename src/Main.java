@@ -8,7 +8,8 @@ public class Main{
 			{
 				playlist.add(args[i]);
 			}
-			playlist.play();
+			System.out.println("List : \n" + playlist.toString());
+			playlist.playAll();
 		}else{
 			System.out.println("Utilisation : précisez un nom de fichier à lire !!!");
 	}}
