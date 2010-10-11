@@ -4,53 +4,63 @@ import javax.sound.sampled.*;
 public class AbstractNonWaveReader implements InterfaceAudioFileDecoder {
 
 	protected File file;
-	protected boolean stop, pause;
+	protected boolean stop, pause, isFinished;
 	
 	public AbstractNonWaveReader(File file){
+		isFinished = false;
+		stop = pause = false;
 		this.file = file;
 	}
 	
 	public void play() {
-	  try {
-	    AudioInputStream in= AudioSystem.getAudioInputStream(file);
-	    AudioInputStream din = null;
-	    AudioFormat baseFormat = in.getFormat();
-	    AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+		try {
+			AudioInputStream in= AudioSystem.getAudioInputStream(file);
+			AudioInputStream din = null;
+			AudioFormat baseFormat = in.getFormat();
+			AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
 							baseFormat.getSampleRate(),
-                                                        16,
-                                                        baseFormat.getChannels(),
-                                                        baseFormat.getChannels() * 2,
-                                                        baseFormat.getSampleRate(),
-                                                        false);
-	    din = AudioSystem.getAudioInputStream(decodedFormat, in);
-	    // Play now.
-	    rawplay(decodedFormat, din);
-	    in.close();
-	  } catch (Exception e)
-	    {
+							16,
+							baseFormat.getChannels(),
+							baseFormat.getChannels() * 2,
+							baseFormat.getSampleRate(),
+							false);
+			din = AudioSystem.getAudioInputStream(decodedFormat, in);
+			// Play now.
+			rawplay(decodedFormat, din);
+			in.close();
+	 	} 
+		catch (Exception e)
+		{
 		//Handle exception.
-	    }
+			System.out.println(e.getMessage());
+		}	
 	}
 
 	private void rawplay(AudioFormat targetFormat, AudioInputStream din) throws IOException, LineUnavailableException
 	{
-	  byte[] data = new byte[4096];
+	  byte[] data = new byte[64];
 	  SourceDataLine line = getLine(targetFormat);
 	  if (line != null)
 	  {
 	    // Start
 	    line.start();
 	    int nBytesRead = 0, nBytesWritten = 0;
-	    while (nBytesRead != -1)
+	    while (!stop && nBytesRead != -1)
 	    {
-		nBytesRead = din.read(data, 0, data.length);
-		if (nBytesRead != -1) nBytesWritten = line.write(data, 0, nBytesRead);
+		System.out.print("");
+		System.out.println("!PAUSE " + !pause);
+		while(!stop && !pause)
+		{
+			nBytesRead = din.read(data, 0, data.length);
+			if (nBytesRead != -1) nBytesWritten = line.write(data, 0, nBytesRead);
+		}
 	    }
 	    // Stop
 	    line.drain();
 	    line.stop();
 	    line.close();
 	    din.close();
+		isFinished = true;
 	  }
 	}
 
@@ -68,5 +78,8 @@ public class AbstractNonWaveReader implements InterfaceAudioFileDecoder {
 	}
 	public void stop(){
 		this.stop = true;
+	}
+	public boolean isFinished(){
+		return isFinished;
 	}
 }
