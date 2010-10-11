@@ -1,22 +1,29 @@
 import java.io.File;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
+import java.util.Map;
+import java.util.Iterator;
+import javax.sound.sampled.*;
 
 public class MusicWave implements InterfaceAudioFileDecoder{
 
 	protected String nom, artiste, album;
 	protected AudioInputStream audioInput;
 	protected boolean stop, pause;
+	protected Map tags;
 
-	public MusicWave(File zizic){
-		audioInput = returnStreamFromFile(zizic);
+	public MusicWave(File file){
+		audioInput = returnStreamFromFile(file);
+		tags=null;
+		try {
+			AudioFileFormat format = AudioSystem.getAudioFileFormat(file);
+			tags = format.properties();
+		} catch (Exception e)
+	    {
+			e.printStackTrace();
+	    }
 	}
-	public AudioInputStream returnStreamFromFile(File zizic){
+	public AudioInputStream returnStreamFromFile(File file){
 		try{
-			File fichier = zizic ;
+			File fichier = file ;
 			audioInput = AudioSystem.getAudioInputStream(fichier);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -54,6 +61,39 @@ public class MusicWave implements InterfaceAudioFileDecoder{
 	}
 	public void stop(){
 		this.stop = true;
+	}
+	
+	public Map getTags() {
+		return tags;
+	}
+	
+	public void printTags(){
+		MapGenres genres = new MapGenres();
+		if (tags.isEmpty())  {
+			System.out.println("** Aucun tag **");
+			return;
+		} else {
+			System.out.println("** Tags **");
+		}
+		
+		if (tags.get("author")!=null)
+			System.out.println("*Auteur : " + tags.get("author"));
+		if (tags.get("title")!=null)
+			System.out.println("*Titre : " + tags.get("title"));
+		if (tags.get("album")!=null)
+			System.out.println("*Album : " + tags.get("album"));
+		if (tags.get("date")!=null)
+			System.out.println("*Date : " + tags.get("date"));
+		if (tags.get("duration")!=null) {
+			int duree=Integer.parseInt(tags.get("duration")+"")/1000000;
+			int duree_min= duree/60;
+			duree = duree%60;
+			System.out.println("*Durée : " + duree_min + "min"+duree+"s ");
+		}
+		if (tags.get("mp3.id3tag.genre")!=null)
+			System.out.println("*Genre : " + genres.get(Integer.parseInt(tags.get("mp3.id3tag.genre")+"") ) );
+		
+		
 	}
 
 }
