@@ -20,7 +20,7 @@ public class Player{
 		InterfaceAudioFileDecoder result = null;
 		if(b)
 		{
-			result = new MusicMp3(file);
+			result = new AbstractNonWaveReader(file);
 			format = "mp3";
 		}
 		b = Pattern.matches(".*\\.wav$", file.getName());
@@ -32,18 +32,21 @@ public class Player{
 		b = Pattern.matches(".*\\.flac$", file.getName());
 		if(b)
 		{
-			result = new MusicFlac(file);
+			//result = new MusicFlac(file);
 			format = "flac";
 		}
 		b = Pattern.matches(".*\\.ogg$", file.getName());
 		if(b)
 		{
-			result = new MusicOGG(file);
+			result = new AbstractNonWaveReader(file);
 			format = "ogg";
 		}
 		if ( result != null)
 		{
 			setStream(result);
+		}
+		else {
+			System.out.println("The file "+file.getName()+" have an unrecognized type");
 		}
 	}
 
